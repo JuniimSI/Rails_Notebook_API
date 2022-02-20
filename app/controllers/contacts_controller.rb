@@ -12,7 +12,7 @@ class ContactsController < ApplicationController
 
   # GET /contacts/1
   def show
-    render json: @contact, include: [:kind, :phones, :address]
+    render json: @contact, include: [:kind], meta: { author: 'Junior F' }
   end
 
   # POST /contacts
@@ -20,7 +20,8 @@ class ContactsController < ApplicationController
     @contact = Contact.new(contact_params)
 
     if @contact.save
-      render json: @contact, include: [:kind, :phones, :address], status: :created, location: @contact
+      render json: @contact, include: [:kind], meta: { author: 'Junior F' },
+             status: :created, location: @contact
     else
       render json: @contact.errors, status: :unprocessable_entity
     end
@@ -29,7 +30,7 @@ class ContactsController < ApplicationController
   # PATCH/PUT /contacts/1
   def update
     if @contact.update(contact_params)
-      render json: @contact, include: [:kind, :phones, :address]
+      render json: @contact, include: [:kind], meta: { author: 'Junior F' }
     else
       render json: @contact.errors, status: :unprocessable_entity
     end

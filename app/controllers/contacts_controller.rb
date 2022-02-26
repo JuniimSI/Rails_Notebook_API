@@ -1,6 +1,9 @@
 # frozen_string_literal: false
 
 class ContactsController < ApplicationController
+  include ActionController::HttpAuthentication::Basic::ControllerMethods
+  http_basic_authenticate_with name: "junior", password: "secret"
+  
   before_action :set_contact, only: %i[show update destroy]
 
   # GET /contacts

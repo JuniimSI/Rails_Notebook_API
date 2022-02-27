@@ -12,6 +12,9 @@ gem 'puma', '~> 4.1'
 
 gem 'rails-i18n'
 gem 'jwt'
+gem 'devise'
+gem 'devise-i18n'
+gem 'devise_token_auth'
 gem 'foreman'
 
 gem 'active_model_serializers'

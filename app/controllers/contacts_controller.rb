@@ -1,16 +1,16 @@
 # frozen_string_literal: false
 
 class ContactsController < ApplicationController
+  before_action :authenticate_user!
 
-  #TOKEN = "secret123"
+  # TOKEN = "secret123"
   # include ActionController::HttpAuthentication::Basic::ControllerMethods
   # http_basic_authenticate_with name: "junior", password: "secret"
   # include ActionController::HttpAuthentication::Digest::ControllerMethods
   # USERS = {"junior" => Digest::MD5.hexdigest(["jack", "Application", "secret"].join(":"))}
-  include ActionController::HttpAuthentication::Token::ControllerMethods
+  # include ActionController::HttpAuthentication::Token::ControllerMethods
 
   before_action :set_contact, only: %i[show update destroy]
-  before_action :authenticate
 
   # GET /contacts
   def index
@@ -51,6 +51,7 @@ class ContactsController < ApplicationController
   end
 
   private
+
   # Use callbacks to share comm"on setup or constraints between actions.
   def set_contact
     @contact = Contact.find(params[:id])
@@ -66,19 +67,19 @@ class ContactsController < ApplicationController
     ActiveModelSerializers::Deserialization.jsonapi_parse(params)
   end
 
-  def authenticate
-    # authenticate_or_request_with_http_digest("Application") do |username|
-    #   USERS[username]
-    # end
-    hmac_secret = 'my$ecret'
+  # def authenticate
+  #   # authenticate_or_request_with_http_digest("Application") do |username|
+  #   #   USERS[username]
+  #   # end
+  #   hmac_secret = 'my$ecret'
 
-    authenticate_or_request_with_http_token do |token, options|
-      JWT.decode token, hmac_secret, true
-      # ActiveSupport::SecurityUtils.secure_compare(
-      #   ::Digest::SHA256.hexdigest(token),
-      #   ::Digest::SHA256.hexdigest(TOKEN)
-      # )
-    end
-  end
+  #   authenticate_or_request_with_http_token do |token, options|
+  #     JWT.decode token, hmac_secret, true
+  #     # ActiveSupport::SecurityUtils.secure_compare(
+  #     #   ::Digest::SHA256.hexdigest(token),
+  #     #   ::Digest::SHA256.hexdigest(TOKEN)
+  #     # )
+  #   end
+  # end
 end
 

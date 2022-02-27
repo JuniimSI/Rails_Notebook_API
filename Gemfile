@@ -11,7 +11,7 @@ gem 'sqlite3', '~> 1.4'
 gem 'puma', '~> 4.1'
 
 gem 'rails-i18n'
-
+gem 'jwt'
 gem 'foreman'
 
 gem 'active_model_serializers'

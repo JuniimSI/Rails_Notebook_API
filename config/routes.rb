@@ -1,6 +1,7 @@
 # frozen_string_literal: false
 
 Rails.application.routes.draw do
+  resources :auths, only: [:create]
   resources :kinds
   resources :contacts do
     resource :kind, only: [:show]

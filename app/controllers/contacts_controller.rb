@@ -1,10 +1,16 @@
 # frozen_string_literal: false
 
 class ContactsController < ApplicationController
-  include ActionController::HttpAuthentication::Basic::ControllerMethods
-  http_basic_authenticate_with name: "junior", password: "secret"
-  
+
+  #TOKEN = "secret123"
+  # include ActionController::HttpAuthentication::Basic::ControllerMethods
+  # http_basic_authenticate_with name: "junior", password: "secret"
+  # include ActionController::HttpAuthentication::Digest::ControllerMethods
+  # USERS = {"junior" => Digest::MD5.hexdigest(["jack", "Application", "secret"].join(":"))}
+  include ActionController::HttpAuthentication::Token::ControllerMethods
+
   before_action :set_contact, only: %i[show update destroy]
+  before_action :authenticate
 
   # GET /contacts
   def index
@@ -58,6 +64,21 @@ class ContactsController < ApplicationController
     #   address_attributes: [:id, :street, :city],
     # )
     ActiveModelSerializers::Deserialization.jsonapi_parse(params)
+  end
+
+  def authenticate
+    # authenticate_or_request_with_http_digest("Application") do |username|
+    #   USERS[username]
+    # end
+    hmac_secret = 'my$ecret'
+
+    authenticate_or_request_with_http_token do |token, options|
+      JWT.decode token, hmac_secret, true
+      # ActiveSupport::SecurityUtils.secure_compare(
+      #   ::Digest::SHA256.hexdigest(token),
+      #   ::Digest::SHA256.hexdigest(TOKEN)
+      # )
+    end
   end
 end
 

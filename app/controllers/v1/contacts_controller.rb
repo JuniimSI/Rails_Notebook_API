@@ -1,13 +1,17 @@
 # frozen_string_literal: false
+
 module V1
   class ContactsController < ApplicationController
+    include ErrorSerializer
     # before_action :authenticate_user!
 
     # TOKEN = "secret123"
     # include ActionController::HttpAuthentication::Basic::ControllerMethods
     # http_basic_authenticate_with name: "junior", password: "secret"
     # include ActionController::HttpAuthentication::Digest::ControllerMethods
-    # USERS = {"junior" => Digest::MD5.hexdigest(["jack", "Application", "secret"].join(":"))}
+    # USERS = {
+    # "junior" => Digest::MD5.hexdigest(["jack", "Application", "secret"].join(":"))
+    # }
     # include ActionController::HttpAuthentication::Token::ControllerMethods
 
     before_action :set_contact, only: %i[show update destroy]
@@ -18,13 +22,14 @@ module V1
       per_page = params[:page].try(:[], :size)
       @contacts = Contact.all.page(page_number).per(per_page)
 
-      render json: @contacts
-     # paginate json: @contacts # API PAGINATE
+      render json: @contacts if stale?(etag: @contacts)
+      # Cache-Control --- expires_in 30.seconds, public: true
+      # paginate json: @contacts # API PAGINATE
     end
 
     # GET /contacts/1
     def show
-      render json: @contact, include: [:kind, :address, :phones], meta: { author: 'Junior F' }
+      render json: @contact, include: %i[kind address phones]
     end
 
     # POST /contacts
@@ -33,9 +38,10 @@ module V1
 
       if @contact.save
         render json: @contact, include: [:kind], meta: { author: 'Junior F' },
-              status: :created, location: @contact
+               status: :created, location: @contact
       else
-        render json: @contact.errors, status: :unprocessable_entity
+        render json: ErrorSerializer.serialize(@contact.errors), 
+               status: :unprocessable_entity
       end
     end
 

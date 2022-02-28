@@ -11,8 +11,13 @@ gem 'sqlite3', '~> 1.4'
 gem 'puma', '~> 4.1'
 
 gem 'rails-i18n'
+
 gem 'jwt'
+
 gem 'devise'
+
+gem 'versionist'
+
 gem 'devise-i18n'
 gem 'devise_token_auth'
 gem 'foreman'

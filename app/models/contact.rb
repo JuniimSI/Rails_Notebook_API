@@ -1,6 +1,13 @@
 # frozen_string_literal: false
 
 class Contact < ApplicationRecord
+  # Kaminari
+  paginates_per 10
+
+  # Validates
+  validates_presence_of :kind
+  validates_presence_of :address
+
   # Associations
   belongs_to :kind
   has_many :phones

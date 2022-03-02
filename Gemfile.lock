@@ -221,6 +221,7 @@ DEPENDENCIES
   listen (~> 3.2)
   pry-rails
   puma (~> 4.1)
+  rack
   rack-cors
   rails (~> 6.0.4, >= 6.0.4.1)
   rails-i18n
